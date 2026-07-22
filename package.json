@@ -1,0 +1,14 @@
+{
+  "name": "wingo-advanced-server",
+  "version": "1.0.0",
+  "description": "Wingo Prediction Server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "you",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
