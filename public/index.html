@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PS PVT MOD | ADVANCED AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Outfit:wght@300;500;600;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root{
+    --gold:#D4AF37;--gold-dark:#A77A13;--gold-light:#F8E7A1;
+    --purple:#8B5CF6;--deep-purple:#5B21B6;
+    --green:#00B86B;--red:#F04444;--orange:#F59E0B;
+    --white:#FFFFFF;--black:#2B2138;--gray:#6B7280;
+    --glass:rgba(255,255,255,.84);
+    --main-gradient:linear-gradient(135deg,#FFF9E8 0%,#F8E7A1 42%,#E9D8FD 100%);
+    --gold-gradient:linear-gradient(135deg,#A77A13 0%,#D4AF37 45%,#F8E7A1 100%);
+    --big-gradient:linear-gradient(to bottom,#5B21B6,#8B5CF6,#D4AF37);
+    --small-gradient:linear-gradient(to bottom,#009B62,#00B86B,#D4AF37);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;}
+body{margin:0;min-height:100vh;font-family:'Outfit',sans-serif;background:var(--main-gradient);color:var(--black);display:flex;justify-content:center;padding:20px;}
+
+#loginScreen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:var(--main-gradient);}
+.login-card{width:88%;max-width:400px;padding:45px 30px;text-align:center;border-radius:45px;background:rgba(255,255,255,.86);border:2px solid white;box-shadow:0 25px 70px rgba(117,77,15,.20);}
+.logo-container{width:84px;height:84px;margin:0 auto 25px;display:flex;align-items:center;justify-content:center;border-radius:25px;background:var(--gold-gradient);box-shadow:0 12px 25px rgba(167,122,19,.32);}
+.logo-icon{color:white;font-family:'Syncopate',sans-serif;font-size:34px;}
+.login-title{margin:0 0 8px;color:var(--gold-dark);font-family:'Syncopate',sans-serif;font-size:18px;}
+.login-subtitle{margin-bottom:25px;color:var(--gray);font-size:10px;font-weight:800;letter-spacing:1px;}
+.login-card input{width:100%;margin-bottom:18px;padding:18px;border:1px solid #E5E7EB;border-radius:18px;outline:none;text-align:center;background:#FFFDF8;font-size:15px;font-family:'Outfit',sans-serif;}
+.login-card input::placeholder{color:#bbb;}
+.btn-login{width:100%;padding:19px;border:none;border-radius:18px;cursor:pointer;color:white;background:var(--gold-gradient);box-shadow:0 9px 18px rgba(167,122,19,.25);font-family:'Syncopate',sans-serif;font-size:12px;font-weight:900;transition:all .3s;}
+.btn-login:disabled{opacity:0.6;cursor:not-allowed;}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite;vertical-align:middle;margin-right:8px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+#dashboard{display:none;width:100%;max-width:520px;padding:22px 18px 35px;}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.brand{color:var(--gold-dark);font-family:'Syncopate',sans-serif;font-size:11px;font-weight:900;}
+.status-dot{display:inline-block;width:9px;height:9px;margin-right:6px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse-dot 2s infinite;}
+@keyframes pulse-dot{0%,100%{opacity:1;}50%{opacity:0.4;}}
+.accuracy{color:var(--gold-dark);font-family:'Bebas Neue',sans-serif;font-size:34px;}
+.level-badge{display:inline-block;margin-top:4px;padding:3px 10px;border-radius:8px;background:var(--gold-gradient);color:white;font-size:8px;font-weight:900;letter-spacing:1px;}
+
+.timer-bar{display:flex;justify-content:center;align-items:center;gap:12px;margin-bottom:12px;padding:10px 16px;background:rgba(255,255,255,.7);border-radius:20px;border:1px solid white;}
+.timer-bar .time{font-family:'Syncopate',sans-serif;font-size:16px;font-weight:900;color:var(--gold-dark);}
+.timer-bar .label{font-size:9px;font-weight:800;color:var(--gray);letter-spacing:1px;}
+.timer-bar .countdown{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--deep-purple);min-width:40px;text-align:center;}
+.timer-bar .countdown.danger{color:var(--red);animation:blink 0.5s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+.hero-card{margin-bottom:16px;padding:35px 15px;text-align:center;background:rgba(255,255,255,.93);border:2px solid white;border-radius:38px;box-shadow:0 15px 35px rgba(105,65,22,.12);}
+.period-box{color:#8A8A8A;font-size:10px;font-weight:900;letter-spacing:1px;}
+.period-box .period-num{color:var(--gold-dark);font-size:16px;font-weight:900;}
+.signal-display{margin:14px 0;font-family:'Bebas Neue',sans-serif;font-size:96px;line-height:1;}
+.signal-display.big{background:var(--big-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.signal-display.small{background:var(--small-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.signal-display.waiting{color:var(--gray);font-size:48px;}
+.ai-status{min-height:28px;color:#667085;font-size:9px;font-weight:900;line-height:1.5;}
+
+.hud-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+.hud-item{padding:15px 4px;text-align:center;background:var(--glass);border:1px solid white;border-radius:22px;}
+.hud-item.total{border-bottom:4px solid var(--gold);}
+.hud-item.win{border-bottom:4px solid var(--green);}
+.hud-item.loss{border-bottom:4px solid var(--red);}
+.hud-item .val{display:block;color:var(--deep-purple);font-family:'Bebas Neue',sans-serif;font-size:32px;}
+.hud-item .lbl{color:var(--gray);font-size:8px;font-weight:900;}
+
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.action-btn{padding:14px 6px;border:1px solid white;border-radius:18px;cursor:pointer;color:var(--gold-dark);background:rgba(255,255,255,.85);font-size:9px;font-weight:900;transition:all .2s;font-family:'Outfit',sans-serif;}
+.action-btn.active{color:white;background:var(--gold-gradient);}
+.action-btn:disabled{opacity:0.5;cursor:not-allowed;}
+
+.analysis-card{display:none;margin-bottom:16px;padding:18px;background:rgba(255,255,255,.82);border:1px solid white;border-radius:30px;}
+.analysis-card.show{display:block;}
+.section-title{margin-bottom:13px;color:var(--gold-dark);text-align:center;font-size:10px;font-weight:900;letter-spacing:1px;}
+.analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.analysis-grid.three-col{grid-template-columns:1fr 1fr 1fr;}
+.analysis-item{padding:11px 6px;text-align:center;background:white;border-radius:17px;}
+.small-label{display:block;color:#98A2B3;font-size:8px;font-weight:900;}
+.analysis-value{display:block;margin-top:2px;color:var(--deep-purple);font-family:'Bebas Neue',sans-serif;font-size:22px;}
+
+.pattern-display{margin-top:12px;padding:12px;text-align:center;background:white;border-radius:17px;}
+.pattern-label{margin-bottom:8px;color:#98A2B3;font-size:8px;font-weight:900;}
+.pattern-values{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;}
+.pattern-ball{display:flex;width:25px;height:25px;align-items:center;justify-content:center;border-radius:50%;color:white;font-family:'Bebas Neue',sans-serif;font-size:13px;}
+.ball-big{background:linear-gradient(135deg,#6D28D9,#A855F7);}
+.ball-small{background:linear-gradient(135deg,#008C5A,#00C878);}
+
+.ai-description{margin-top:12px;padding:13px;border-radius:17px;background:rgba(255,253,244,.90);color:#6B5A35;font-size:10px;font-weight:700;line-height:1.5;}
+
+.history-card{height:350px;overflow-y:auto;padding:18px 12px;background:rgba(255,255,255,.80);border:2px solid white;border-radius:32px;}
+.history-head,.row{display:grid;grid-template-columns:0.8fr 1.2fr 1.2fr 0.8fr 0.8fr;align-items:center;text-align:center;}
+.history-head{margin-bottom:12px;color:var(--gold-dark);font-size:7px;font-weight:900;letter-spacing:0.5px;}
+.row{margin-bottom:6px;padding:10px 4px;border-radius:14px;background:white;font-size:9px;font-weight:800;}
+.row.win-row{border-left:3px solid var(--green);}
+.row.loss-row{border-left:3px solid var(--red);}
+.row.jackpot-row{border-left:3px solid var(--gold);background:linear-gradient(135deg,#FFF9E8,#F8E7A1);}
+.txt-big{color:var(--purple);}.txt-small{color:var(--green);}
+.tag-win{color:var(--green);}.tag-loss{color:var(--red);}.tag-jackpot{color:var(--gold);font-weight:900;}
+.empty-history{padding:40px 10px;color:#7B7289;text-align:center;font-size:10px;font-weight:800;}
+.footer-note{padding-top:15px;color:#76664A;text-align:center;font-size:8px;font-weight:800;}
+
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);padding:14px 28px;border-radius:18px;font-size:12px;font-weight:800;color:white;background:rgba(43,33,56,0.95);backdrop-filter:blur(20px);border:2px solid rgba(255,255,255,0.1);box-shadow:0 20px 60px rgba(0,0,0,0.3);transition:transform 0.5s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s ease;opacity:0;z-index:10000;max-width:90%;text-align:center;pointer-events:none;font-family:'Outfit',sans-serif;}
+.toast.show{transform:translateX(-50%) translateY(0px);opacity:1;}
+.toast.success{border-color:var(--green);}
+.toast.error{border-color:var(--red);}
+.toast.info{border-color:var(--gold);}
+.toast.jackpot{border-color:var(--gold);background:linear-gradient(135deg,#A77A13,#D4AF37);}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<div id="loginScreen">
+    <div class="login-card">
+        <div class="logo-container"><span class="logo-icon">PS</span></div>
+        <h2 class="login-title">PS PVT MOD</h2>
+        <div class="login-subtitle">V23 ADVANCED AI | 2 LEVEL ENGINE</div>
+        <input type="password" id="keyInput" placeholder="ACCESS KEY" autocomplete="off" value="PS263">
+        <button class="btn-login" id="loginBtn" onclick="startApp()">VERIFY & ENTER</button>
+    </div>
+</div>
+
+<div id="dashboard">
+    <div class="header">
+        <div>
+            <div class="brand"><span class="status-dot"></span>PS PVT MOD</div>
+            <div class="level-badge" id="levelBadge">ADVANCED AI</div>
+        </div>
+        <div class="accuracy" id="accDisplay">0.0%</div>
+    </div>
+
+    <div class="timer-bar">
+        <span class="label">⏱</span>
+        <span class="countdown" id="countdownTimer">--</span>
+        <span class="label">SEC</span>
+        <span style="color:var(--gray);font-size:9px;font-weight:800;">|</span>
+        <span class="label">⏰</span>
+        <span class="time" id="clockDisplay">--:--:--</span>
+    </div>
+
+    <div class="hero-card">
+        <div class="period-box">TARGET PERIOD: <span class="period-num" id="periodId">------</span></div>
+        <div class="signal-display waiting" id="mainSignal">---</div>
+        <div class="ai-status" id="statusText">INITIALIZING...</div>
+    </div>
+
+    <div class="hud-grid">
+        <div class="hud-item total"><span class="val" id="st-total">0</span><span class="lbl">TOTAL</span></div>
+        <div class="hud-item win"><span class="val" id="st-wins">0</span><span class="lbl">WINS</span></div>
+        <div class="hud-item loss"><span class="val" id="st-loss">0</span><span class="lbl">LOSS</span></div>
+    </div>
+
+    <div class="action-grid">
+        <button class="action-btn" id="statsBtn" onclick="togglePanel('stats')" disabled>PREDICT STATS</button>
+        <button class="action-btn" id="levelBtn" onclick="togglePanel('levels')" disabled>LEVEL INFO</button>
+    </div>
+
+    <div class="analysis-card" id="statsPanel">
+        <div class="section-title">PREDICTION STATS</div>
+        <div class="analysis-grid">
+            <div class="analysis-item"><span class="small-label">P(BIG)</span><span class="analysis-value" id="probBig">50.0%</span></div>
+            <div class="analysis-item"><span class="small-label">P(SMALL)</span><span class="analysis-value" id="probSmall">50.0%</span></div>
+            <div class="analysis-item"><span class="small-label">CONFIDENCE</span><span class="analysis-value" id="confidenceVal">50.0%</span></div>
+            <div class="analysis-item"><span class="small-label">STREAK</span><span class="analysis-value" id="currentStreak">-</span></div>
+            <div class="analysis-item"><span class="small-label">CONSENSUS</span><span class="analysis-value" id="consensus">-</span></div>
+            <div class="analysis-item"><span class="small-label">ENGINE</span><span class="analysis-value" id="modelLevel">L1+L2</span></div>
+        </div>
+        <div class="pattern-display">
+            <div class="pattern-label">LAST 10 PATTERN</div>
+            <div class="pattern-values" id="patternValues"></div>
+        </div>
+    </div>
+
+    <div class="analysis-card" id="levelsPanel">
+        <div class="section-title">2 LEVEL AI BREAKDOWN</div>
+        <div class="analysis-grid three-col">
+            <div class="analysis-item" style="border-bottom:3px solid var(--purple);">
+                <span class="small-label">LEVEL 1</span>
+                <span class="analysis-value" id="l1Big" style="font-size:20px;">-</span>
+                <span class="small-label" id="l1Name">STAT AI</span>
+            </div>
+            <div class="analysis-item" style="border-bottom:3px solid var(--green);">
+                <span class="small-label">LEVEL 2</span>
+                <span class="analysis-value" id="l2Big" style="font-size:20px;">-</span>
+                <span class="small-label" id="l2Name">DEEP AI</span>
+            </div>
+            <div class="analysis-item" style="border-bottom:3px solid var(--gold);">
+                <span class="small-label">VOTE</span>
+                <span class="analysis-value" id="voteResult" style="font-size:20px;">-</span>
+                <span class="small-label" id="voteCount">0/0</span>
+            </div>
+        </div>
+        <div class="analysis-grid" style="margin-top:10px;">
+            <div class="analysis-item"><span class="small-label">L1 PREDICT</span><span class="analysis-value" id="l1Prediction" style="font-size:18px;">-</span></div>
+            <div class="analysis-item"><span class="small-label">L1 CONF</span><span class="analysis-value" id="l1Conf" style="font-size:18px;">-</span></div>
+            <div class="analysis-item"><span class="small-label">L2 PREDICT</span><span class="analysis-value" id="l2Prediction" style="font-size:18px;">-</span></div>
+            <div class="analysis-item"><span class="small-label">L2 CONF</span><span class="analysis-value" id="l2Conf" style="font-size:18px;">-</span></div>
+        </div>
+        <div class="ai-description" id="levelDescription">Loading AI engines...</div>
+    </div>
+
+    <div class="history-card">
+        <div class="history-head"><span>PERIOD</span><span>PREDICT</span><span>ACTUAL</span><span>NUM</span><span>RESULT</span></div>
+        <div id="historyFeed"><div class="empty-history">Waiting for results...</div></div>
+    </div>
+    <div class="footer-note">Advanced AI 2-Level Engine | Real-time predictions</div>
+</div>
+
+<script>
+const API_BASE = window.location.origin;
+let isActivated = false;
+let currentKey = '';
+let isProcessing = false;
+let stats = { total: 0, wins: 0, loss: 0, jackpots: 0 };
+let historyRows = [];
+let activePanel = null;
+let toastTimeout;
+let countdown = 60;
+let isFirstRun = true;
+
+function showToast(message, type = 'info', duration = 3000) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = 'toast ' + type;
+    void toast.offsetWidth;
+    toast.classList.add('show');
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => toast.classList.remove('show'), duration);
+}
+
+// ============================================
+// REAL-TIME CLOCK & COUNTDOWN
+// ============================================
+function updateClockAndCountdown() {
+    const now = new Date();
+    const seconds = now.getSeconds();
+    const time = now.toTimeString().split(' ')[0];
+    document.getElementById('clockDisplay').innerText = time;
+    
+    const newCountdown = seconds === 0 ? 60 : 60 - seconds;
+    const timerEl = document.getElementById('countdownTimer');
+    timerEl.innerText = newCountdown;
+    
+    timerEl.className = 'countdown';
+    if (newCountdown <= 5) timerEl.classList.add('danger');
+    
+    // When minute changes, refresh prediction
+    if (newCountdown === 60 && !isFirstRun && isActivated) {
+        getPredictionAndMatch();
+    }
+    isFirstRun = false;
+}
+
+// ============================================
+// LOGIN
+// ============================================
+async function startApp() {
+    if (isProcessing) return;
+    const keyInput = document.getElementById('keyInput');
+    const loginBtn = document.getElementById('loginBtn');
+    const key = keyInput.value.trim();
+    
+    if (!key || key.length < 3) {
+        showToast('⚠️ Please enter a valid access key', 'error');
+        return;
+    }
+
+    isProcessing = true;
+    loginBtn.disabled = true;
+    loginBtn.innerHTML = '<span class="spinner"></span> VERIFYING...';
+
+    try {
+        const response = await fetch(`${API_BASE}/api/verify-key?key=${encodeURIComponent(key)}`);
+        const data = await response.json();
+        
+        if (data.valid) {
+            currentKey = key;
+            isActivated = true;
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            document.getElementById('statsBtn').disabled = false;
+            document.getElementById('levelBtn').disabled = false;
+            showToast('✅ Access Granted!', 'success');
+            
+            // Start real-time updates
+            updateClockAndCountdown();
+            setInterval(updateClockAndCountdown, 1000);
+            
+            // Get first prediction immediately
+            await getPredictionAndMatch();
+        } else {
+            showToast('❌ Invalid access key.', 'error');
+            keyInput.value = '';
+            keyInput.focus();
+        }
+    } catch (error) {
+        showToast('❌ Server error: ' + error.message, 'error');
+    } finally {
+        isProcessing = false;
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = 'VERIFY & ENTER';
+    }
+}
+
+document.getElementById('keyInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') startApp();
+});
+
+// ============================================
+// PREDICTION + MATCH
+// ============================================
+async function getPredictionAndMatch() {
+    if (!isActivated || isProcessing) return;
+    isProcessing = true;
+
+    try {
+        // Get prediction from server
+        const predResponse = await fetch(`${API_BASE}/api/predict?key=${encodeURIComponent(currentKey)}`);
+        const predData = await predResponse.json();
+        
+        if (!predResponse.ok) {
+            if (predResponse.status === 401) {
+                showToast('❌ Session expired. Please re-activate.', 'error');
+                document.getElementById('dashboard').style.display = 'none';
+                document.getElementById('loginScreen').style.display = 'flex';
+                isActivated = false;
+                return;
+            }
+            throw new Error(predData.error || 'Prediction failed');
+        }
+
+        // Get latest result from API
+        const resultResponse = await fetch(`${API_BASE}/api/latest-result?key=${encodeURIComponent(currentKey)}`);
+        const resultData = await resultResponse.json();
+        if (!resultResponse.ok) throw new Error('Failed to get latest result');
+
+        // Process match
+        const predicted = predData.prediction;
+        const actualCat = resultData.category;
+        const actualNum = resultData.number;
+        const actualIssue = resultData.issue;
+
+        let result = 'LOSS';
+        let resultClass = 'tag-loss';
+        let isWin = false;
+        let isJackpot = false;
+        let rowClass = 'loss-row';
+
+        if (predicted === actualCat) {
+            isWin = true;
+            result = 'WIN';
+            resultClass = 'tag-win';
+            rowClass = 'win-row';
+            
+            if (actualNum === 0 || actualNum === 9) {
+                isJackpot = true;
+                result = 'JACKPOT!';
+                resultClass = 'tag-jackpot';
+                rowClass = 'jackpot-row';
+                stats.jackpots++;
+                showToast(`🎰 JACKPOT! Number ${actualNum}`, 'jackpot', 4000);
+            }
+        }
+
+        stats.total++;
+        if (isWin) stats.wins++;
+        else stats.loss++;
+
+        // Add to history
+        historyRows.unshift({
+            issue: actualIssue,
+            prediction: predicted,
+            actual: actualCat,
+            number: actualNum,
+            result: result,
+            resultClass: resultClass,
+            rowClass: rowClass,
+            isWin: isWin,
+            isJackpot: isJackpot
+        });
+        if (historyRows.length > 50) historyRows.pop();
+
+        // Update UI
+        updateUI(predData, resultData, result, resultClass, rowClass);
+
+        document.getElementById('st-total').innerText = stats.total;
+        document.getElementById('st-wins').innerText = stats.wins;
+        document.getElementById('st-loss').innerText = stats.loss;
+        document.getElementById('accDisplay').innerText = stats.total ? ((stats.wins / stats.total) * 100).toFixed(1) + '%' : '0.0%';
+
+        renderHistory();
+
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('statusText').innerText = 'ERROR: ' + error.message;
+    } finally {
+        isProcessing = false;
+    }
+}
+
+// ============================================
+// UPDATE UI
+// ============================================
+function updateUI(predData, resultData, result, resultClass, rowClass) {
+    const pred = predData.prediction;
+    
+    document.getElementById('mainSignal').innerText = pred;
+    document.getElementById('mainSignal').className = 'signal-display ' + pred.toLowerCase();
+    
+    document.getElementById('statusText').innerHTML = predData.status + ' | CONF: ' + predData.confidence;
+    document.getElementById('levelBadge').innerText = 'ACTIVE ' + pred;
+    document.getElementById('periodId').innerText = predData.currentPeriod || '------';
+    
+    document.getElementById('probBig').innerText = predData.level1.big;
+    document.getElementById('probSmall').innerText = predData.level1.small;
+    document.getElementById('confidenceVal').innerText = predData.confidence;
+    document.getElementById('consensus').innerText = predData.bothAgree ? 'AGREE' : 'SPLIT';
+    document.getElementById('consensus').style.color = predData.bothAgree ? 'var(--green)' : 'var(--orange)';
+    
+    // Streak
+    let streakText = '-';
+    if (historyRows.length > 0) {
+        const lastRow = historyRows[0];
+        if (lastRow.isWin) {
+            let count = 0;
+            for (let r of historyRows) {
+                if (r.isWin) count++;
+                else break;
+            }
+            streakText = 'W' + count;
+        } else {
+            let count = 0;
+            for (let r of historyRows) {
+                if (!r.isWin) count++;
+                else break;
+            }
+            streakText = 'L' + count;
+        }
+    }
+    document.getElementById('currentStreak').innerText = streakText;
+    
+    document.getElementById('l1Big').innerText = predData.level1.big;
+    document.getElementById('l2Big').innerText = predData.level2.big;
+    document.getElementById('l1Name').innerText = predData.level1.name;
+    document.getElementById('l2Name').innerText = predData.level2.name;
+    document.getElementById('voteResult').innerText = predData.bothAgree ? 'AGREE' : 'SPLIT';
+    document.getElementById('voteCount').innerText = predData.votes.bigVotes + 'B/' + predData.votes.smallVotes + 'S';
+    
+    document.getElementById('l1Prediction').innerText = predData.l1Pred;
+    document.getElementById('l1Prediction').style.color = predData.l1Pred === 'BIG' ? 'var(--purple)' : 'var(--green)';
+    document.getElementById('l2Prediction').innerText = predData.l2Pred;
+    document.getElementById('l2Prediction').style.color = predData.l2Pred === 'BIG' ? 'var(--purple)' : 'var(--green)';
+    document.getElementById('l1Conf').innerText = predData.l1Conf;
+    document.getElementById('l2Conf').innerText = predData.l2Conf;
+    
+    document.getElementById('levelDescription').innerHTML = 
+        'L1(' + predData.level1.name + '): ' + predData.level1.big + ' BIG | ' +
+        'L2(' + predData.level2.name + '): ' + predData.level2.big + ' BIG | ' +
+        'Latest: #' + resultData.issue + ' → ' + resultData.number + ' (' + resultData.category + ')';
+    
+    // Pattern balls
+    const box = document.getElementById('patternValues');
+    const ball = document.createElement('div');
+    ball.className = 'pattern-ball ' + (pred === 'BIG' ? 'ball-big' : 'ball-small');
+    ball.innerText = pred === 'BIG' ? 'B' : 'S';
+    box.prepend(ball);
+    while (box.children.length > 10) box.removeChild(box.lastChild);
+}
+
+// ============================================
+// RENDER HISTORY
+// ============================================
+function renderHistory() {
+    const feed = document.getElementById('historyFeed');
+    if (!historyRows.length) {
+        feed.innerHTML = '<div class="empty-history">Waiting for results...</div>';
+        return;
+    }
+    feed.innerHTML = '';
+    historyRows.forEach(function(row) {
+        const div = document.createElement('div');
+        div.className = 'row ' + row.rowClass;
+        
+        const p = document.createElement('span');
+        p.innerText = '#' + row.issue.slice(-6);
+        p.style.fontSize = '8px';
+        
+        const pr = document.createElement('span');
+        pr.innerText = row.prediction;
+        pr.className = row.prediction === 'BIG' ? 'txt-big' : 'txt-small';
+        
+        const ac = document.createElement('span');
+        ac.innerText = row.actual;
+        ac.className = row.actual === 'BIG' ? 'txt-big' : 'txt-small';
+        
+        const num = document.createElement('span');
+        num.innerText = row.number;
+        num.style.fontWeight = '900';
+        num.style.color = row.number >= 5 ? 'var(--purple)' : 'var(--green)';
+        
+        const re = document.createElement('span');
+        re.innerText = row.result;
+        re.className = row.resultClass;
+        re.style.fontWeight = '900';
+        if (row.isJackpot) re.style.fontSize = '10px';
+        
+        div.append(p, pr, ac, num, re);
+        feed.appendChild(div);
+    });
+}
+
+function togglePanel(panel) {
+    const sp = document.getElementById('statsPanel'), lp = document.getElementById('levelsPanel');
+    const sb = document.getElementById('statsBtn'), lb = document.getElementById('levelBtn');
+    if (activePanel === panel) {
+        sp.classList.remove('show');
+        lp.classList.remove('show');
+        sb.classList.remove('active');
+        lb.classList.remove('active');
+        activePanel = null;
+        return;
+    }
+    sp.classList.remove('show');
+    lp.classList.remove('show');
+    sb.classList.remove('active');
+    lb.classList.remove('active');
+    if (panel === 'stats') {
+        sp.classList.add('show');
+        sb.classList.add('active');
+    } else {
+        lp.classList.add('show');
+        lb.classList.add('active');
+    }
+    activePanel = panel;
+}
+
+document.getElementById('keyInput').addEventListener('copy', function(e) {
+    e.preventDefault();
+    showToast('🔒 Copy disabled for security', 'info', 1500);
+});
+
+console.log('🔒 PS PVT MOD - Real-time Prediction System');
+console.log('📡 Default Key: PS263');
+</script>
+</body>
+</html>
