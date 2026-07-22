@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SDD ADV PREDICTOR</title>
+  <style>
+    body {
+      background: #000;
+      color: #fff;
+      font-family: sans-serif;
+      text-align: center;
+    }
+    .box {
+      border: 1px solid gold;
+      margin: 10px;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    h1 { color: gold; }
+  </style>
+</head>
+<body>
+
+<h1>🔥 SDD ADV SERVER</h1>
+
+<div class="box" id="main">Loading...</div>
+<div class="box" id="rate"></div>
+<div class="box" id="timer"></div>
+<div class="box" id="history"></div>
+
+<script>
+const API = "/api/predict";
+
+async function loadData() {
+  try {
+    let res = await fetch(API);
+    let data = await res.json();
+
+    document.getElementById("main").innerHTML =
+      "Period: " + data.period + "<br>" +
+      "Prediction: " + data.prediction + "<br>" +
+      "Key: " + data.key;
+
+    document.getElementById("rate").innerHTML =
+      "Win Rate: " + data.winrate;
+
+    let h = "";
+    data.history.forEach(i => {
+      h += `${i.period} → ${i.prediction} | ${i.actual}<br>`;
+    });
+
+    document.getElementById("history").innerHTML = h;
+
+  } catch (e) {
+    document.getElementById("main").innerHTML = "Server Error";
+  }
+}
+
+// ⏱️ 1-min sync timer
+function startTimer() {
+  function update() {
+    let sec = new Date().getSeconds();
+    let left = 60 - sec;
+    document.getElementById("timer").innerHTML =
+      "Next Update: " + left + "s";
+  }
+
+  setInterval(update, 1000);
+
+  let delay = (60 - new Date().getSeconds()) * 1000;
+
+  setTimeout(() => {
+    loadData();
+    setInterval(loadData, 60000);
+  }, delay);
+}
+
+startTimer();
+loadData();
+</script>
+
+</body>
+</html>
